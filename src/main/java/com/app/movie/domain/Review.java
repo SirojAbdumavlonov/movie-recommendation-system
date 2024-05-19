@@ -11,13 +11,12 @@ import lombok.ToString;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
-
-@Entity
-@Table(name = "watch_list")
 @ToString
+@Entity
+@Table(name = "reviews")
 @Data
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-public class WatchList implements Serializable {
+public class Review implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
@@ -26,13 +25,16 @@ public class WatchList implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     @SequenceGenerator(name = "sequenceGenerator")
     @Column(name = "id")
-    private Integer id;
+    private Long id;
+
+    @Column(name = "review_text")
+    private String reviewText;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties(value = { "movie", "watchLists", "reviews" }, allowSetters = true)
-    private User user;
+    private User users;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties(value = { "genres", "watchLists", "reviews", "user" }, allowSetters = true)
-    private Movie movies;
+    private Movie movie;
 }

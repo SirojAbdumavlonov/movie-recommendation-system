@@ -1,20 +1,19 @@
 package com.app.movie.controller;
 
-import com.app.movie.model.AuthenticationResponse;
-import com.app.movie.model.SignInRequest;
-import com.app.movie.model.SignUpRequest;
-import com.app.movie.service.UsersService;
+import com.app.movie.dto.AuthenticationResponse;
+import com.app.movie.dto.SignInRequest;
+import com.app.movie.dto.SignUpRequest;
+import com.app.movie.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
 @RequiredArgsConstructor
 public class AuthenticationController {
-    private final UsersService userService;
+    private final UserService userService;
 
 
     //todo: Function is tested and works

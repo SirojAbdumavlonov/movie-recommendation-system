@@ -1,18 +1,18 @@
 package com.app.movie.service;
 
-
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.security.Key;
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Function;
 
 @Service
@@ -25,10 +25,6 @@ public class JwtService {
     public String extractUsername(String token){
         return extractClaim(token, Claims::getSubject);
     }
-
-//    public String generateToken(UserDetails userDetails){
-//        return generateToken(new HashMap<>(), userDetails);
-//    }
 
     public boolean isTokenValid(String token, UserDetails userDetails){
         final String username = extractUsername(token);
@@ -83,26 +79,4 @@ public class JwtService {
         byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
         return Keys.hmacShaKeyFor(keyBytes);
     }
-
-
-//    public static String updateAuthorities(String token, Collection<? extends GrantedAuthority> newAuthorities) {
-//        Jws<Claims> claimsJws =
-//                Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token);
-//        Claims claims = claimsJws.getBody();
-//
-//        List<String> roles = newAuthorities.stream()
-//                .map(GrantedAuthority::getAuthority)
-//                .collect(Collectors.toList());
-//
-//        // Update the 'authorities' claim in the JWT
-//        claims.put("authorities", roles);
-//
-//        // Re-encode the JWT with updated claims
-//        return Jwts.builder()
-//                .setClaims(claims)
-//                .signWith(getSigningKey(), SignatureAlgorithm.HS256)
-//                .compact();
-//    }
-
-
 }
