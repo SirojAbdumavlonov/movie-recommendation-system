@@ -1,14 +1,21 @@
 package com.app.movie.service;
 
 import com.app.movie.domain.Movie;
+import com.app.movie.dto.MovieSearchCriteriaDTO;
 import com.app.movie.repository.MovieRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.coyote.BadRequestException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+
+// TODO:
+// 1. recommend genre and user ratings
+// 2. top rated-movies on their preferred genre on a specific year
+// 3. adding movies into watchlist for later viewing
+// 4. allow users to search for movies by specific criteria such as genre, release year, or director
+// 5. implement a feature to filter out movies that a user has already watched or expressed disinterest in
 
 @Slf4j
 @Service
@@ -21,6 +28,13 @@ public class MovieService {
         log.debug("Getting all movies");
         List<Movie> movies = movieRepository.findAll();
         log.debug("Found movies: {}", movies);
+        return movies;
+    }
+
+    public List<Movie> searchMovies(MovieSearchCriteriaDTO movieSearchCriteriaDTO) {
+        log.debug("Searching movies by criteria: {}", movieSearchCriteriaDTO);
+        List<Movie> movies = movieRepository.searchMovies(movieSearchCriteriaDTO);
+        log.debug("Found movies: {}", movieSearchCriteriaDTO);
         return movies;
     }
 

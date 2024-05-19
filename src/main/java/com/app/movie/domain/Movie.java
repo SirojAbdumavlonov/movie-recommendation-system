@@ -42,6 +42,12 @@ public class Movie implements Serializable {
     @Column(name = "director")
     private String director;
 
+    @Column(name = "trailer_url")
+    private String trailerUrl;
+
+    @Column(name = "trailer_image_url")
+    private String trailerImageUrl;
+
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
         name = "rel_movie__genres",
@@ -54,17 +60,17 @@ public class Movie implements Serializable {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "movies")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "users", "movies" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "user", "movies" }, allowSetters = true)
     private Set<WatchList> watchLists = new HashSet<>();
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "movie")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "users", "movie" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "user", "movie" }, allowSetters = true)
     private Set<Review> reviews = new HashSet<>();
 
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "movies")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "movie", "watchLists", "reviews" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "movies", "watchLists", "reviews" }, allowSetters = true)
     private Set<User> users = new HashSet<>();
 
     public Movie genres(Set<Genre> genres) {

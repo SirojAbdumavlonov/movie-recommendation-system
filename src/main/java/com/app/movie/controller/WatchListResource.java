@@ -16,14 +16,14 @@ import java.util.Optional;
 
 @Slf4j
 @RestController
-@RequestMapping("/api/watch-lists")
+@RequestMapping("/api")
 @Transactional
 @RequiredArgsConstructor
 public class WatchListResource {
 
     private final WatchListRepository watchListRepository;
 
-    @PostMapping("")
+    @PostMapping("/watch-lists")
     public ResponseEntity<WatchList> createWatchList(@RequestBody WatchList watchList) throws Exception {
         log.debug("REST request to save WatchList : {}", watchList);
         if (watchList.getId() != null) {
@@ -34,7 +34,7 @@ public class WatchListResource {
             .body(watchList);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/watch-lists/{id}")
     public ResponseEntity<WatchList> updateWatchList(
         @PathVariable(value = "id", required = false) final Integer id,
         @RequestBody WatchList watchList
@@ -56,36 +56,13 @@ public class WatchListResource {
             .body(watchList);
     }
 
-    @PatchMapping(value = "/{id}", consumes = { "application/json", "application/merge-patch+json" })
-    public ResponseEntity<WatchList> partialUpdateWatchList(
-        @PathVariable(value = "id", required = false) final Integer id,
-        @RequestBody WatchList watchList
-    ) throws BadRequestException {
-        log.debug("REST request to partial update WatchList partially : {}, {}", id, watchList);
-        if (watchList.getId() == null) {
-            throw new BadRequestException("Invalid watch list id");
-        }
-        if (!Objects.equals(id, watchList.getId())) {
-            throw new BadRequestException("Invalid ID");
-        }
-
-        if (!watchListRepository.existsById(id)) {
-            throw new BadRequestException("Entity not found");
-        }
-
-        Optional<WatchList> result = watchListRepository.findById(watchList.getId()).map(watchListRepository::save);
-
-        return ResponseEntity.ok(result.orElseThrow());
-    }
-
-    @GetMapping("")
+    @GetMapping("/watch-lists")
     public List<WatchList> getAllWatchLists() {
         log.debug("REST request to get all WatchLists");
         return watchListRepository.findAll();
     }
 
-
-    @GetMapping("/{id}")
+    @GetMapping("/watch-lists/{id}")
     public ResponseEntity<WatchList> getWatchList(@PathVariable("id") Integer id) {
         log.debug("REST request to get WatchList : {}", id);
         Optional<WatchList> watchList = watchListRepository.findById(id);
@@ -93,7 +70,7 @@ public class WatchListResource {
     }
 
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/watch-lists/{id}")
     public ResponseEntity<Void> deleteWatchList(@PathVariable("id") Integer id) {
         log.debug("REST request to delete WatchList : {}", id);
         watchListRepository.deleteById(id);

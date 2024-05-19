@@ -30,7 +30,7 @@ public class Genre implements Serializable {
     private Integer id;
 
     @Column(name = "genre_name")
-    private String genreName;
+    private String name;
 
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "genres")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)

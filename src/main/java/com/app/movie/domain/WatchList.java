@@ -28,6 +28,8 @@ public class WatchList implements Serializable {
     @Column(name = "id")
     private Integer id;
 
+    private String name;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties(value = { "movie", "watchLists", "reviews" }, allowSetters = true)
     private User user;

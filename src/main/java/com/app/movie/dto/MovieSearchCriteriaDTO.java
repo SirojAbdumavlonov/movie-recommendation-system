@@ -1,0 +1,16 @@
+package com.app.movie.dto;
+
+import lombok.Builder;
+import lombok.Data;
+import lombok.ToString;
+import lombok.experimental.Accessors;
+
+@Data
+@ToString
+@Accessors(chain = true)
+public class MovieSearchCriteriaDTO {
+    private String name;
+    private Float minRating;
+    private Float maxRating;
+    private Integer year;
+}

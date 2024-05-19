@@ -53,14 +53,14 @@ public class User implements Serializable, UserDetails {
     @JsonIgnoreProperties(value = { "genres", "watchLists", "reviews", "users" }, allowSetters = true)
     private Set<Movie> movies = new HashSet<>();
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "users")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "users", "movies" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "user", "movies" }, allowSetters = true)
     private Set<WatchList> watchLists = new HashSet<>();
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "users")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "users", "movies" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "user", "movies" }, allowSetters = true)
     private Set<Review> reviews = new HashSet<>();
 
     @Override
@@ -142,10 +142,10 @@ public class User implements Serializable, UserDetails {
 
     public void setReviews(Set<Review> reviews) {
         if (this.reviews != null) {
-            this.reviews.forEach(i -> i.setUsers(null));
+            this.reviews.forEach(i -> i.setUser(null));
         }
         if (reviews != null) {
-            reviews.forEach(i -> i.setUsers(this));
+            reviews.forEach(i -> i.setUser(this));
         }
         this.reviews = reviews;
     }
@@ -157,13 +157,13 @@ public class User implements Serializable, UserDetails {
 
     public User addReviews(Review review) {
         this.reviews.add(review);
-        review.setUsers(this);
+        review.setUser(this);
         return this;
     }
 
     public User removeReviews(Review review) {
         this.reviews.remove(review);
-        review.setUsers(null);
+        review.setUser(null);
         return this;
     }
 
