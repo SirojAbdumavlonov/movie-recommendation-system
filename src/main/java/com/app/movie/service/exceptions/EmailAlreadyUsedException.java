@@ -1,4 +1,4 @@
-package com.app.movie.service;
+package com.app.movie.service.exceptions;
 
 public class EmailAlreadyUsedException extends RuntimeException {
 

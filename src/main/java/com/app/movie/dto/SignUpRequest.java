@@ -1,4 +1,4 @@
-package com.app.movie.model;
+package com.app.movie.dto;
 
 import lombok.Builder;
 
