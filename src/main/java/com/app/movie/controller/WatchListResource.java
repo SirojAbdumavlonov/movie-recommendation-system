@@ -2,6 +2,7 @@ package com.app.movie.controller;
 
 import com.app.movie.domain.WatchList;
 import com.app.movie.repository.WatchListRepository;
+import com.app.movie.service.WatchListService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.coyote.BadRequestException;
@@ -22,6 +23,23 @@ import java.util.Optional;
 public class WatchListResource {
 
     private final WatchListRepository watchListRepository;
+    private final WatchListService watchListService;
+
+    @GetMapping("/watch-lists/{id}")
+    public ResponseEntity<WatchList> getWatchList(@PathVariable("id") Integer id) {
+        log.debug("REST request to get WatchList : {}", id);
+        Optional<WatchList> watchList = watchListRepository.findById(id);
+        return ResponseEntity.ok(watchList.orElseThrow());
+    }
+
+    @PostMapping("/watch-lists/{listId}/{movieId}")
+    public ResponseEntity<WatchList> addMovie(@PathVariable Integer listId, @PathVariable Long movieId) throws Exception {
+        log.debug("REST request to add movie to watch-list. MovieId: {}. WatchListId: {}", movieId, listId);
+        WatchList watchList = watchListService.addMovieToWatchList(listId, movieId);
+        log.debug("Resulted WatchList: {}", watchList);
+        return ResponseEntity.ok()
+            .body(watchList);
+    }
 
     @PostMapping("/watch-lists")
     public ResponseEntity<WatchList> createWatchList(@RequestBody WatchList watchList) throws Exception {
@@ -61,14 +79,6 @@ public class WatchListResource {
         log.debug("REST request to get all WatchLists");
         return watchListRepository.findAll();
     }
-
-    @GetMapping("/watch-lists/{id}")
-    public ResponseEntity<WatchList> getWatchList(@PathVariable("id") Integer id) {
-        log.debug("REST request to get WatchList : {}", id);
-        Optional<WatchList> watchList = watchListRepository.findById(id);
-        return ResponseEntity.ok(watchList.orElseThrow());
-    }
-
 
     @DeleteMapping("/watch-lists/{id}")
     public ResponseEntity<Void> deleteWatchList(@PathVariable("id") Integer id) {
