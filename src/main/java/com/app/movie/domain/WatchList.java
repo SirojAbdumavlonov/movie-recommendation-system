@@ -47,7 +47,11 @@ public class WatchList implements Serializable {
 
     public WatchList addMovie(Movie movie) {
         this.movies.add(movie);
-        movie.getWatchLists().add(this);
+        return this;
+    }
+
+    public WatchList removeMovie(Movie movie) {
+        this.movies.remove(movie);
         return this;
     }
 }

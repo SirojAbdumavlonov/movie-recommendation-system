@@ -37,7 +37,7 @@ public class Movie implements Serializable {
     private String description;
 
     @Column(name = "release_year")
-    private Instant releaseYear;
+    private Instant releaseDate;
 
     @Column(name = "director")
     private String director;

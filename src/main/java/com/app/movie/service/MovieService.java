@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -43,5 +44,18 @@ public class MovieService {
         Optional<Movie> movie = movieRepository.findById(id);
         log.debug("Found movie: {}", movie);
         return movie;
+    }
+
+    public List<Movie> getSimilarMovies(Long movieId) {
+        log.debug("Getting similar movies: {}", movieId);
+        List<Movie> similarMovies = movieRepository.findSimilar();
+
+        if(similarMovies.isEmpty()) {
+            log.warn("Similar movies not found. MovieId: {}", movieId);
+            return similarMovies;
+        }
+
+        log.debug("Found similar movies: {}", similarMovies);
+        return similarMovies;
     }
 }

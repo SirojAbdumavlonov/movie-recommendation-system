@@ -20,13 +20,11 @@ public class WatchListService {
     public WatchList addMovieToWatchList(Integer listId, Long movieId) throws Exception {
         log.debug("Adding movie with ID {} to watch list with ID {}", movieId, listId);
 
-        WatchList watchList = watchListRepository.findById(listId)
-            .orElseThrow(() -> new BadRequestException("Watch-list with specified id not found"));
+        WatchList watchList = getWatchListElseThrow(listId);
         log.debug("Found watch list: {}", watchList);
 
-        Movie movie = movieRepository.findById(movieId)
-            .orElseThrow(() -> new BadRequestException("Movie with specified id not found"));
-        log.debug("Found movie: {}", movie);
+        Movie movie = getMovieElseThrow(movieId);
+        log.debug("Found movie : {}", movie);
 
         if (watchList.getMovies().contains(movie)) {
             log.error("Movie with ID {} is already in watch list with ID {}", movieId, listId);
@@ -38,6 +36,36 @@ public class WatchListService {
 
         log.debug("Added movie to watch list. Updated watch list: {}", updatedWatchList);
         return watchList;
+    }
+
+    private Movie getMovieElseThrow(Long movieId) throws BadRequestException {
+        return movieRepository.findById(movieId)
+            .orElseThrow(() -> new BadRequestException("Movie with specified id not found"));
+    }
+
+    public WatchList removeMovieFromWatchList(Integer listId, Long movieId) throws Exception {
+        log.debug("Removing movie with ID {} from watch list with ID {}", movieId, listId);
+
+        WatchList watchList = getWatchListElseThrow(listId);
+
+        Movie movie = getMovieElseThrow(movieId);
+        log.debug("Found movie: {}", movie);
+
+        if (!watchList.getMovies().contains(movie)) {
+            log.error("Movie with ID {} not in watch list with ID {}", movieId, listId);
+            throw new BadRequestException("Movie is not in watch list");
+        }
+
+        WatchList updatedWatchList = watchList.addMovie(movie);
+        watchListRepository.save(updatedWatchList);
+
+        log.debug("Removed movie from watch list. Updated watch list: {}", updatedWatchList);
+        return watchList;
+    }
+
+    private WatchList getWatchListElseThrow(Integer listId) throws BadRequestException {
+        return watchListRepository.findById(listId)
+            .orElseThrow(() -> new BadRequestException("Watch-list with specified id not found"));
     }
 }
 

@@ -3,7 +3,6 @@ package com.app.movie.controller;
 import com.app.movie.domain.Movie;
 import com.app.movie.dto.MovieSearchCriteriaDTO;
 import com.app.movie.service.MovieService;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.coyote.BadRequestException;
@@ -70,5 +69,14 @@ public class MovieResource {
         log.debug("Found movie : {}", movie);
         return ResponseEntity.ok()
             .body(movie);
+    }
+
+    @GetMapping("/movies/{id}/recommendation")
+    public ResponseEntity<List<Movie>> getSimilarMovies(@PathVariable Long id) throws Exception {
+        log.debug("REST request to get Similar Movies. MovieId : {}", id);
+        List<Movie> similarMovies = movieService.getSimilarMovies(id);
+        log.debug("Similar movies : {}", similarMovies);
+        return ResponseEntity.ok()
+            .body(similarMovies);
     }
 }
