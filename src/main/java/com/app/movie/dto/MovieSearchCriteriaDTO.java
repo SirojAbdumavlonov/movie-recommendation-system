@@ -1,6 +1,5 @@
 package com.app.movie.dto;
 
-import lombok.Builder;
 import lombok.Data;
 import lombok.ToString;
 import lombok.experimental.Accessors;
@@ -13,4 +12,5 @@ public class MovieSearchCriteriaDTO {
     private Float minRating;
     private Float maxRating;
     private Integer year;
+    private String director;
 }

@@ -40,6 +40,9 @@ public class MovieRepositoryCustomImpl implements MovieRepositoryCustom {
         if (criteria.getYear() != null) {
             predicates.add(cb.equal(movie.get("year"), criteria.getYear()));
         }
+        if (criteria.getDirector() != null){
+            predicates.add(cb.equal(movie.get("director"), criteria.getDirector()));
+        }
 
         query.where(predicates.toArray(new Predicate[0]));
 

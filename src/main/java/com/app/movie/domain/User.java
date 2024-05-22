@@ -28,6 +28,7 @@ public class User implements Serializable, UserDetails {
     @Serial
     private static final long serialVersionUID = 1L;
 
+    @lombok.Getter
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     @SequenceGenerator(name = "sequenceGenerator")

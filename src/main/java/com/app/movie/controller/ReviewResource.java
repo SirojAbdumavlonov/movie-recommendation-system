@@ -1,6 +1,7 @@
 package com.app.movie.controller;
 
 import com.app.movie.domain.Review;
+import com.app.movie.dto.ReviewDTO;
 import com.app.movie.repository.ReviewRepository;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -8,10 +9,13 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+import com.app.movie.security.CurrentUserId;
+import com.app.movie.service.ReviewService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.coyote.BadRequestException;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,14 +27,15 @@ import org.springframework.web.bind.annotation.*;
 public class ReviewResource {
 
     private final ReviewRepository reviewRepository;
+    private final ReviewService reviewService;
 
     @PostMapping("")
-    public ResponseEntity<Review> createReviews(@RequestBody Review review) throws URISyntaxException, BadRequestException {
-        log.debug("REST request to save Review : {}", review);
-        if (review.getId() != null) {
-            throw new BadRequestException("A new review cannot already have an ID");
-        }
-        review = reviewRepository.save(review);
+    public ResponseEntity<Review> createReviews(
+        @CurrentUserId UserDetails user,
+        @RequestBody ReviewDTO reviewDTO) throws Exception {
+        log.debug("REST request to save Review : {}", reviewDTO);
+
+        Review review = reviewService.addReview(reviewDTO, user.getUsername());
         return ResponseEntity.created(new URI("/api/reviews/" + review.getId()))
             .body(review);
     }
