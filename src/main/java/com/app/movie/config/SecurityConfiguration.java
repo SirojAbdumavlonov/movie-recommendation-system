@@ -29,7 +29,8 @@ public class SecurityConfiguration {
                             "/api/users/sign-in",
                             "/api/users/sign-up",
                             "/api/authorities",
-                            "/api/movies"
+                            "/api/movies",
+                                "/api/films"
                         )
                         .permitAll()
                         .anyRequest().authenticated()
