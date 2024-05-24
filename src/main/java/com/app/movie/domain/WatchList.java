@@ -10,6 +10,7 @@ import java.util.Set;
 
 import lombok.Data;
 import lombok.ToString;
+import lombok.experimental.Accessors;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -18,6 +19,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Table(name = "watch_list")
 @ToString
 @Data
+@Accessors(chain = true)
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class WatchList implements Serializable {
 

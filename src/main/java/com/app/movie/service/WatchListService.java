@@ -9,6 +9,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.coyote.BadRequestException;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Optional;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -16,6 +19,15 @@ public class WatchListService {
 
     private final WatchListRepository watchListRepository;
     private final MovieRepository movieRepository;
+
+    public List<WatchList> getUserWatchLists() {
+        log.debug("Getting user watch-lists");
+        WatchList watchList = new WatchList()
+            .setName("User WatchList");
+        watchListRepository.save(watchList);
+        log.debug("Getting user watch-lists");
+        return watchListRepository.findAll();
+    }
 
     public WatchList addMovieToWatchList(Integer listId, Long movieId) throws Exception {
         log.debug("Adding movie with ID {} to watch list with ID {}", movieId, listId);
@@ -61,6 +73,29 @@ public class WatchListService {
 
         log.debug("Removed movie from watch list. Updated watch list: {}", updatedWatchList);
         return watchList;
+    }
+
+    public Optional<WatchList> getOne(Integer id) {
+        return watchListRepository.findById(id);
+    }
+
+    public WatchList saveWatchList(WatchList watchList) {
+        return watchListRepository.save(watchList);
+    }
+
+    public WatchList updateWatchList(WatchList watchList) throws BadRequestException {
+        if (!watchListRepository.existsById(watchList.getId())) {
+            throw new BadRequestException("WatchList not found");
+        }
+        return watchListRepository.save(watchList);
+    }
+
+    public void deleteWatchList(Integer id) throws Exception {
+        WatchList watchList = getWatchListElseThrow(id);
+        if (!watchListRepository.existsById(watchList.getId())) {
+            throw new BadRequestException("WatchList not found");
+        }
+        watchListRepository.deleteById(watchList.getId());
     }
 
     private WatchList getWatchListElseThrow(Integer listId) throws BadRequestException {

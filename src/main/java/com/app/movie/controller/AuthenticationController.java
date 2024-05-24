@@ -11,38 +11,25 @@ import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
+@RequestMapping("/api")
 @RequiredArgsConstructor
 public class AuthenticationController {
+
     private final UserService userService;
 
-
-    //todo: Function is tested and works
-    //    @PreAuthorize("hasAnyRole('SUPER_ADMIN')")
-    @PostMapping("/sign-up")
-    public ResponseEntity<?> signUp(@RequestBody SignUpRequest signUpRequest) {
-
-        AuthenticationResponse authenticationResponse =
-                userService.saveUser(signUpRequest);
-
+    @PostMapping("/auth/sign-up")
+    public ResponseEntity<AuthenticationResponse> signUp(@RequestBody SignUpRequest signUpRequest) {
+        log.info("Registering new user: {}", signUpRequest);
+        AuthenticationResponse authenticationResponse = userService.save(signUpRequest);
         log.info("Registered successfully!");
-        //todo: registering with unique email
-        // already used id is working
-        // other fillings are checked by client side
         return ResponseEntity.ok(authenticationResponse);
     }
-    //todo: Function is tested and works
-    @PostMapping("/sign-in")
-    public ResponseEntity<?> signIn(@RequestBody SignInRequest signInRequest) {
 
-       AuthenticationResponse authenticationResponse =
-                userService.signIn(signInRequest);
-
+    @PostMapping("/auth/sign-in")
+    public ResponseEntity<AuthenticationResponse> signIn(@RequestBody SignInRequest signInRequest) {
+        log.info("Signing in user: {}", signInRequest);
+        AuthenticationResponse authenticationResponse = userService.signIn(signInRequest);
         log.info("Signed in successfully!");
-        //todo: signing in only with email and password
-        // trying in both ways(if email or password is incorrect)
-        // incorrect password is working
-        // incorrect email is working
         return ResponseEntity.ok(authenticationResponse);
     }
-
 }

@@ -8,7 +8,7 @@ import lombok.experimental.Accessors;
 @ToString
 @Accessors(chain = true)
 public class MovieSearchCriteriaDTO {
-    private String name;
+    private String title;
     private Float minRating;
     private Float maxRating;
     private Integer year;

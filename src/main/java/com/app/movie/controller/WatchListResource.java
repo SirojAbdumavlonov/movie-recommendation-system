@@ -1,8 +1,8 @@
 package com.app.movie.controller;
 
 import com.app.movie.domain.WatchList;
-import com.app.movie.repository.WatchListRepository;
 import com.app.movie.service.WatchListService;
+import com.app.movie.utils.ResponseUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.coyote.BadRequestException;
@@ -22,14 +22,15 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class WatchListResource {
 
-    private final WatchListRepository watchListRepository;
     private final WatchListService watchListService;
 
     @GetMapping("/watch-lists/{id}")
     public ResponseEntity<WatchList> getWatchList(@PathVariable("id") Integer id) {
         log.debug("REST request to get WatchList : {}", id);
-        Optional<WatchList> watchList = watchListRepository.findById(id);
-        return ResponseEntity.ok(watchList.orElseThrow());
+        Optional<WatchList> watchList = watchListService.getOne(id);
+        ResponseEntity<WatchList> response = ResponseUtils.wrapOrNotFound(watchList);
+        log.debug("REST response : {}", response);
+        return response;
     }
 
     @PostMapping("/watch-lists/{listId}/{movieId}")
@@ -47,7 +48,7 @@ public class WatchListResource {
         if (watchList.getId() != null) {
             throw new BadRequestException("A new watchList cannot already have an ID");
         }
-        watchList = watchListRepository.save(watchList);
+        watchList = watchListService.saveWatchList(watchList);
         return ResponseEntity.created(new URI("/api/watch-lists/" + watchList.getId()))
             .body(watchList);
     }
@@ -65,11 +66,7 @@ public class WatchListResource {
             throw new BadRequestException("Invalid watch-list ID");
         }
 
-        if (!watchListRepository.existsById(id)) {
-            throw new BadRequestException("Entity not found");
-        }
-
-        watchList = watchListRepository.save(watchList);
+        watchList = watchListService.updateWatchList(watchList);
         return ResponseEntity.ok()
             .body(watchList);
     }
@@ -77,13 +74,13 @@ public class WatchListResource {
     @GetMapping("/watch-lists")
     public List<WatchList> getAllWatchLists() {
         log.debug("REST request to get all WatchLists");
-        return watchListRepository.findAll();
+        return watchListService.getUserWatchLists();
     }
 
     @DeleteMapping("/watch-lists/{id}")
-    public ResponseEntity<Void> deleteWatchList(@PathVariable("id") Integer id) {
+    public ResponseEntity<Void> deleteWatchList(@PathVariable("id") Integer id) throws Exception {
         log.debug("REST request to delete WatchList : {}", id);
-        watchListRepository.deleteById(id);
+        watchListService.deleteWatchList(id);
         return ResponseEntity.noContent()
             .build();
     }

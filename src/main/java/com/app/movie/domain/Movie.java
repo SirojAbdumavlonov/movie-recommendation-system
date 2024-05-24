@@ -11,6 +11,7 @@ import java.util.Set;
 
 import lombok.Data;
 import lombok.ToString;
+import lombok.experimental.Accessors;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -19,6 +20,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @ToString
 @Table(name = "movies")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+@Accessors(chain = true)
 public class Movie implements Serializable {
 
     @Serial
@@ -36,7 +38,7 @@ public class Movie implements Serializable {
     @Column(name = "description")
     private String description;
 
-    @Column(name = "release_year")
+    @Column(name = "release_date")
     private Instant releaseDate;
 
     @Column(name = "director")
@@ -72,9 +74,4 @@ public class Movie implements Serializable {
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "user", "movie" }, allowSetters = true)
     private Set<Review> reviews = new HashSet<>();
-
-    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "movies")
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "movies", "watchLists", "reviews" }, allowSetters = true)
-    private Set<User> users = new HashSet<>();
 }

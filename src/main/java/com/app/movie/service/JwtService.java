@@ -22,7 +22,7 @@ public class JwtService {
     private static final String SECRET_KEY = "30M18gaU4TRNnOPIcsOsp6BoCrvkxUZ2rej8OuQILnahRGarCku0eAjl5QPKpeI7gMdWSZ+9523gly72Efs4CQ==";
     private static final long EXPIRATION_TIME = 864_000_000;
 
-    public String extractUsername(String token){
+    public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
     }
 
@@ -30,6 +30,7 @@ public class JwtService {
         final String username = extractUsername(token);
         return (username.equals(userDetails.getUsername())) && !isTokenExpired(token);
     }
+
     public boolean isTokenExpired(String token){
         if(extractExpiration(token).before(new Date())){
             throw new RuntimeException("Incorrect data!");
@@ -48,8 +49,7 @@ public class JwtService {
     public String generateToken(
             Map<String, Object> extraClaims,
             UserDetails userDetails
-    ){
-
+    ) {
         return Jwts
                 .builder()
                 .setClaims(extraClaims)
@@ -65,7 +65,7 @@ public class JwtService {
         return claimsResolver.apply(claims);
     }
 
-    private Claims extractAllClaims(String token){
+    private Claims extractAllClaims(String token) {
         return Jwts
                 .parserBuilder()
                 .setSigningKey(getSigningKey())

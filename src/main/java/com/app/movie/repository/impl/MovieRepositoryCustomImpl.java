@@ -28,14 +28,8 @@ public class MovieRepositoryCustomImpl implements MovieRepositoryCustom {
 
         List<Predicate> predicates = new ArrayList<>();
 
-        if (criteria.getName() != null && !criteria.getName().isEmpty()) {
-            predicates.add(cb.like(cb.lower(movie.get("name")), "%" + criteria.getName().toLowerCase() + "%"));
-        }
-        if (criteria.getMinRating() >= 0) {
-            predicates.add(cb.greaterThanOrEqualTo(movie.get("rating"), criteria.getMinRating()));
-        }
-        if (criteria.getMaxRating() >= 0) {
-            predicates.add(cb.lessThanOrEqualTo(movie.get("rating"), criteria.getMaxRating()));
+        if (criteria.getTitle() != null && !criteria.getTitle().isEmpty()) {
+            predicates.add(cb.like(cb.lower(movie.get("name")), "%" + criteria.getTitle().toLowerCase() + "%"));
         }
         if (criteria.getYear() != null) {
             predicates.add(cb.equal(movie.get("year"), criteria.getYear()));
