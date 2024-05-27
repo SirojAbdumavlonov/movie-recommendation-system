@@ -75,7 +75,7 @@ public class UserService {
     private void authenticateUser(SignInRequest signInRequest) {
         Authentication authentication = authenticationManager.authenticate(
             new UsernamePasswordAuthenticationToken(
-                signInRequest.email(),
+                signInRequest.username(),
                 signInRequest.password()
             )
         );
