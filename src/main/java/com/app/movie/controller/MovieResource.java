@@ -1,6 +1,7 @@
 package com.app.movie.controller;
 
 import com.app.movie.domain.Movie;
+import com.app.movie.domain.User;
 import com.app.movie.dto.MovieSearchCriteriaDTO;
 import com.app.movie.service.MovieService;
 import com.app.movie.utils.ResponseUtils;
@@ -51,8 +52,6 @@ public class MovieResource {
     @GetMapping("/movies")
     public ResponseEntity<List<Movie>> getAllMovies() {
         log.debug("REST request to get all Movies");
-        String userToken = SecurityUtils.getCurrentUserToken();
-        System.out.println(userToken);
         List<Movie> movies = movieService.getAll();
         log.debug("All movies: {}", movies);
         return ResponseEntity.ok()
