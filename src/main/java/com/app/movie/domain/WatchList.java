@@ -38,7 +38,7 @@ public class WatchList implements Serializable {
     @JsonIgnoreProperties(value = { "movie", "watchLists", "reviews" }, allowSetters = true)
     private User user;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
         name = "watch_list_movie",
         joinColumns = @JoinColumn(name = "watch_list_id"),
