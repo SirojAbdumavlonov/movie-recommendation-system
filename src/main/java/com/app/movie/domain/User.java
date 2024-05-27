@@ -51,7 +51,7 @@ public class User implements Serializable, UserDetails {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
         name = "rel_users__movies",
         joinColumns = @JoinColumn(name = "users_id"),
@@ -66,7 +66,7 @@ public class User implements Serializable, UserDetails {
     @JsonIgnoreProperties(value = { "user", "movies" }, allowSetters = true)
     private Set<WatchList> watchLists = new HashSet<>();
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "user")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "user", "movies" }, allowSetters = true)
     private Set<Review> reviews = new HashSet<>();

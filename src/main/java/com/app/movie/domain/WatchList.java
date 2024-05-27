@@ -5,7 +5,9 @@ import jakarta.persistence.*;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import lombok.Data;
@@ -38,14 +40,14 @@ public class WatchList implements Serializable {
     @JsonIgnoreProperties(value = { "movie", "watchLists", "reviews" }, allowSetters = true)
     private User user;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
         name = "watch_list_movie",
         joinColumns = @JoinColumn(name = "watch_list_id"),
         inverseJoinColumns = @JoinColumn(name = "movie_id")
     )
     @JsonIgnoreProperties(value = { "genres", "watchLists", "reviews", "user" }, allowSetters = true)
-    private Set<Movie> movies = new HashSet<>();
+    private List<Movie> movies = new ArrayList<>();
 
     public WatchList addMovie(Movie movie) {
         this.movies.add(movie);
