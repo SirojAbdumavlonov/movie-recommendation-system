@@ -34,7 +34,7 @@ public class WatchList implements Serializable {
 
     private String name;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JsonIgnoreProperties(value = { "movie", "watchLists", "reviews" }, allowSetters = true)
     private User user;
 
