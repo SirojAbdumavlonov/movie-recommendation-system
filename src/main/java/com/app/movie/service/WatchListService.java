@@ -1,9 +1,11 @@
 package com.app.movie.service;
 
 import com.app.movie.domain.Movie;
+import com.app.movie.domain.User;
 import com.app.movie.domain.WatchList;
 import com.app.movie.repository.MovieRepository;
 import com.app.movie.repository.WatchListRepository;
+import com.app.movie.utils.SecurityUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.coyote.BadRequestException;
@@ -22,11 +24,9 @@ public class WatchListService {
 
     public List<WatchList> getUserWatchLists() {
         log.debug("Getting user watch-lists");
-        WatchList watchList = new WatchList()
-            .setName("User WatchList");
-        watchListRepository.save(watchList);
+        Integer userId = SecurityUtils.getCurrentUserPrincipal().getId();
         log.debug("Getting user watch-lists");
-        return watchListRepository.findAll();
+        return watchListRepository.getWatchListByUserId(userId);
     }
 
     public WatchList addMovieToWatchList(Integer listId, Long movieId) throws Exception {

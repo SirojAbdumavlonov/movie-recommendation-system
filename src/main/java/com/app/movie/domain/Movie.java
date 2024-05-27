@@ -17,9 +17,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 @Data
 @Entity
-@ToString
 @Table(name = "movies")
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Accessors(chain = true)
 public class Movie implements Serializable {
 
@@ -74,4 +72,20 @@ public class Movie implements Serializable {
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "user", "movie" }, allowSetters = true)
     private Set<Review> reviews = new HashSet<>();
+
+    @Override
+    public String toString() {
+        return "Movie{" +
+               "id=" + id +
+               ", title='" + title + '\'' +
+               ", description='" + description + '\'' +
+               ", releaseDate=" + releaseDate +
+               ", director='" + director + '\'' +
+               ", trailerUrl='" + trailerUrl + '\'' +
+               ", trailerImageUrl='" + trailerImageUrl + '\'' +
+               ", genres=" + genres +
+               ", watchLists=" + watchLists +
+               ", reviews=" + reviews +
+               '}';
+    }
 }

@@ -17,11 +17,10 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 
-@Entity
-@Table(name = "watch_list")
-@ToString
 @Data
+@Entity
 @Accessors(chain = true)
+@Table(name = "watch_list")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class WatchList implements Serializable {
 
@@ -57,5 +56,15 @@ public class WatchList implements Serializable {
     public WatchList removeMovie(Movie movie) {
         this.movies.remove(movie);
         return this;
+    }
+
+    @Override
+    public String toString() {
+        return "WatchList{" +
+               "id=" + id +
+               ", name='" + name + '\'' +
+               ", user=" + user +
+               ", movies=" + movies +
+               '}';
     }
 }

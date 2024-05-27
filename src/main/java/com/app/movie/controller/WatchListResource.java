@@ -42,6 +42,15 @@ public class WatchListResource {
             .body(watchList);
     }
 
+    @DeleteMapping("/watch-lists/{listId}/{movieId}")
+    public ResponseEntity<WatchList> removeMovie(@PathVariable Integer listId, @PathVariable Long movieId) throws Exception {
+        log.debug("REST request to remove movie from watch-list. MovieId: {}. WatchListId: {}", movieId, listId);
+        WatchList watchList = watchListService.removeMovieFromWatchList(listId, movieId);
+        log.debug("Resulted WatchList : {}", watchList);
+        return ResponseEntity.ok()
+            .body(watchList);
+    }
+
     @PostMapping("/watch-lists")
     public ResponseEntity<WatchList> createWatchList(@RequestBody WatchList watchList) throws Exception {
         log.debug("REST request to save WatchList : {}", watchList);
@@ -72,7 +81,7 @@ public class WatchListResource {
     }
 
     @GetMapping("/watch-lists")
-    public List<WatchList> getAllWatchLists() {
+    public List<WatchList> getUserWatchLists() {
         log.debug("REST request to get all WatchLists");
         return watchListService.getUserWatchLists();
     }

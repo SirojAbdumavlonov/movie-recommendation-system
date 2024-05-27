@@ -38,7 +38,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         if (isInvalidAuthHeader(authHeader)) {
             filterChain.doFilter(request, response);
-            log.error("Authorization header is invalid");
+            log.warn("Authorization header not found");
             return;
         }
 
