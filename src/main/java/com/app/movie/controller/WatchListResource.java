@@ -25,7 +25,7 @@ public class WatchListResource {
     private final WatchListService watchListService;
 
     @GetMapping("/watch-lists/{id}")
-    public ResponseEntity<WatchList> getWatchList(@PathVariable("id") Integer id) {
+    public ResponseEntity<WatchList> getWatchList(@PathVariable("id") Integer id) throws Exception {
         log.debug("REST request to get WatchList : {}", id);
         Optional<WatchList> watchList = watchListService.getOne(id);
         ResponseEntity<WatchList> response = ResponseUtils.wrapOrNotFound(watchList);

@@ -29,6 +29,26 @@ public class WatchListService {
         return watchListRepository.getWatchListByUserId(userId);
     }
 
+    public WatchList saveWatchList(WatchList watchList) {
+        log.debug("Save watchlist: {}", watchList);
+        User user = SecurityUtils.getCurrentUserPrincipal();
+        watchList.setUser(user);
+        log.debug("Watchlist saved: {}", watchList);
+        return watchListRepository.save(watchList);
+    }
+
+    public Optional<WatchList> getOne(Integer id) throws Exception {
+        log.debug("Getting watchlist by id: {}", id);
+        WatchList watchList = watchListRepository.findById(id)
+            .orElseThrow(() -> new BadRequestException("Watchlist with this id not found"));
+        User currentUser = SecurityUtils.getCurrentUserPrincipal();
+        if (watchList.getUser().equals(currentUser)) {
+            throw new BadRequestException("User has no access to watchlist");
+        }
+        log.debug("Found watchlist by id: {}", id);
+        return Optional.of(watchList);
+    }
+
     public WatchList addMovieToWatchList(Integer listId, Long movieId) throws Exception {
         log.debug("Adding movie with ID {} to watch list with ID {}", movieId, listId);
 
@@ -50,10 +70,6 @@ public class WatchListService {
         return watchList;
     }
 
-    private Movie getMovieElseThrow(Long movieId) throws BadRequestException {
-        return movieRepository.findById(movieId)
-            .orElseThrow(() -> new BadRequestException("Movie with specified id not found"));
-    }
 
     public WatchList removeMovieFromWatchList(Integer listId, Long movieId) throws Exception {
         log.debug("Removing movie with ID {} from watch list with ID {}", movieId, listId);
@@ -75,14 +91,6 @@ public class WatchListService {
         return watchList;
     }
 
-    public Optional<WatchList> getOne(Integer id) {
-        return watchListRepository.findById(id);
-    }
-
-    public WatchList saveWatchList(WatchList watchList) {
-        return watchListRepository.save(watchList);
-    }
-
     public WatchList updateWatchList(WatchList watchList) throws BadRequestException {
         if (!watchListRepository.existsById(watchList.getId())) {
             throw new BadRequestException("WatchList not found");
@@ -101,6 +109,11 @@ public class WatchListService {
     private WatchList getWatchListElseThrow(Integer listId) throws BadRequestException {
         return watchListRepository.findById(listId)
             .orElseThrow(() -> new BadRequestException("Watch-list with specified id not found"));
+    }
+
+    private Movie getMovieElseThrow(Long movieId) throws BadRequestException {
+        return movieRepository.findById(movieId)
+            .orElseThrow(() -> new BadRequestException("Movie with specified id not found"));
     }
 }
 
